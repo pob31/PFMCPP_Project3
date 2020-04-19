@@ -94,7 +94,7 @@ void Car::moveCar(Car car, float speed, float duration)
 void Car::turnCar(Car car, float angleSteeringWheel, float speed, float duration)
 {
     // turn car with sterring wheel angled at angleSteeringWheel at speed for duration.
-    ignoreUnused(car, angleSteeringWheel, duration);
+    ignoreUnused(car, speed, angleSteeringWheel, duration);
 }
 
 /*
@@ -391,20 +391,20 @@ struct Compressor
     int releaseTime = 50;
 
     bool aboveThreshold(float signal, float threshold);
-    float compressSignal(float signal, float threshold, float ratio, int kneeCurve, int attackTime);
+    float compressSignal(float signal, Compressor compressor);
     float releaseSignal(float signal, Compressor compressor);
 
 };
 
-bool Compressor::aboveThreshold(float signal, float threshold)
+bool Compressor::aboveThreshold(float signal, float thresholdLimit)
 {
-    return(signal > threshold);
+    return(signal > thresholdLimit);
 }
 
-float Compressor::compressSignal(float signal, float threshold, float ratio, int kneeCurve, int attackTime)
+float Compressor::compressSignal(float signal, Compressor compressor)
 {
     // signal *= attenuation
-    ignoreUnused(threshold, ratio, kneeCurve, attackTime);
+    ignoreUnused(compressor);
     return(signal);
 }
 
@@ -462,28 +462,28 @@ struct Routing
     EightFloats sendLevels = {-60.0f, -60.0f, -60.0f, -60.0f, -60.0f, -60.0f, -60.0f, -60.0f};
     EightFloats sendPans = {0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f};
 
-    float send2Master(float signal, bool assign2master);
-    void send2groups(float signal, EightInts assign2groups);
-    void send2auxes(float signal, EightFloats sendLevels);
+    float send2Master(float signal, bool setAssign2master);
+    void send2groups(float signal, EightInts setAssign2groups);
+    void send2auxes(float signal, EightFloats setSendLevels);
     
 };
 
-float Routing::send2Master(float signal, bool assign2master)
+float Routing::send2Master(float signal, bool setAssign2master)
 {
     ignoreUnused(signal);
-    return(assign2master);
+    return(setAssign2master);
 }
 
-void Routing::send2groups(float signal, EightInts assign2groups)
+void Routing::send2groups(float signal, EightInts setAssign2groups)
 {
     // assign to groups
-    ignoreUnused(signal, assign2groups);
+    ignoreUnused(signal, setAssign2groups);
 }
 
-void Routing::send2auxes(float signal, EightFloats sendLevels)
+void Routing::send2auxes(float signal, EightFloats setSendLevels)
 {
     // assign to auxes
-    ignoreUnused(signal, sendLevels);
+    ignoreUnused(signal, setSendLevels);
 }
 
 /*
@@ -519,15 +519,15 @@ float OutputChannel::sumSignals(float signal1, float signal2, float signal3)
     return(signal1 + signal2 + signal3);
 }
 
-float OutputChannel::adjustOutputLevel(float signal, float outputLevel)
+float OutputChannel::adjustOutputLevel(float signal, float outLevel)
 {
-    return(outputLevel*signal);
+    return(outLevel*signal);
 }
 
-void OutputChannel::send2output(float signal, int outputPatch)
+void OutputChannel::send2output(float signal, int outPatch)
 {
     // send signal according to output patch
-    ignoreUnused(signal, outputPatch);
+    ignoreUnused(signal, outPatch);
 }
 
 /*
